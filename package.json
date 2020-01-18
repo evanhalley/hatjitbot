@@ -1,0 +1,30 @@
+{
+  "name": "hatjitbot",
+  "version": "1.0.0",
+  "description": "Slackbot for creating a hatjitsu room and sharing it to slack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "hatjitsu",
+    "node",
+    "agile",
+    "scrum",
+    "sizing",
+    "nodejs"
+  ],
+  "author": "Evan Halley",
+  "license": "MIT",
+  "engines": {
+    "node": "10.x"
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0"
+  },
+  "dependencies": {
+    "@slack/rtm-api": "^5.0.3",
+    "puppeteer": "^2.0.0"
+  }
+}
