@@ -2,9 +2,16 @@
 
 const { RTMClient } = require('@slack/rtm-api');
 const puppeteer = require('puppeteer');
+const express = require('express');
 
 const MAGIC_WORDS = [ 'size', 'groom', 'grooming' ];
 const rtm = new RTMClient(process.env.BOT_TOKEN);
+
+// for heroku deployment, bind to the port and do nothing
+if (process.env.PORT) {
+    const app = express();
+    app.listen(process.env.PORT, console.log('Bind successful'));
+}
 
 rtm.on('message', async (event) => {
 
