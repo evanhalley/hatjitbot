@@ -1,31 +1,37 @@
 'use strict';
 
-//const dotenv = require('dotenv');
+const { RTMClient } = require('@slack/rtm-api');
 const puppeteer = require('puppeteer');
-const express = require('express');
-const bodyParser = require('body-parser');
 
-//dotenv.config()
+const MAGIC_WORDS = [ 'size', 'groom', 'grooming' ];
+const rtm = new RTMClient(process.env.BOT_TOKEN);
 
-const app = express();
-app.use(bodyParser.json());
+rtm.on('message', async (event) => {
 
-app.post('/groom', async (req, res) => {
-    console.log('New grooming request!');
+    if (new RegExp(MAGIC_WORDS.join("|")).test(event.text)) {
+        console.log('New grooming request!');
+        await rtm.sendTyping(event.channel);
+        let url = await getGroomRoomUrl();
 
-    try {
-        console.log(req.body);
-        const userName = req.body.user_name;
-        const url = await getGroomRoomUrl();
-        const reply = {
-            "text": `Hello ${userName} here is your new Hatjitsu room as requested: ${url}`
-        };
-        res.json(reply);
-    } catch (e) {
-        console.error('Error getting a Hatjitsu room', e);
-        res.status(500).send('Something bad happened. Check the logs!');
+        if (url) {
+            console.log(`Grooming request fulfilled ${url}`);
+            await rtm.sendMessage(`Your new story sizing room awaits ${url}`, event.channel);
+        } else {
+            console.log('Some bad happened');
+            await rtm.sendMessage('Something went wrong...embarrasing :-(', event.channel);
+        }
+    } else {
+        await rtm.sendTyping(event.channel);
+        await rtm.sendMessage(`I'm not much of a conversationalist, but you can use any of the following words to get a new hatjitsu room: ${MAGIC_WORDS}`, event.channel);
     }
 });
+
+rtm.on('error', event => console.error(event));
+
+(async () => {
+    // Connect to Slack
+    const { self, team } = await rtm.start();
+})();
 
 async function getGroomRoomUrl() {
     let url = null;
@@ -51,7 +57,3 @@ async function getGroomRoomUrl() {
     }
     return url;
 }
-
-const listener = app.listen(process.env.PORT || 3000, function () {
-    console.log('Your app is listening on port ' + listener.address().port);
-});
