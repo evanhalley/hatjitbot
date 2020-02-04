@@ -6,7 +6,7 @@ const express = require('express');
 
 const MAGIC_WORDS = [ 'size', 'groom', 'grooming' ];
 const rtm = new RTMClient(process.env.BOT_TOKEN);
-
+console.log("d");
 // for heroku deployment, bind to the port and do nothing
 if (process.env.PORT) {
     const app = express();

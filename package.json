@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node -r dotenv/config ."
   },
   "keywords": [
     "hatjitsu",
@@ -21,7 +21,7 @@
     "node": "10.x"
   },
   "devDependencies": {
-    "dotenv": "^8.0.0"
+    "dotenv": "^8.2.0"
   },
   "dependencies": {
     "@slack/rtm-api": "^5.0.3",
